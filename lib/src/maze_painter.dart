@@ -35,7 +35,8 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
     this.rows = 10,
     this.wallColor = Colors.black,
     this.wallThickness = 4.0,
-  }) {
+    required int? seed,
+  }) : _randomizer = Random(seed) {
     _wallPaint
       ..color = wallColor
       ..isAntiAlias = true
@@ -93,7 +94,7 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
   final Paint _wallPaint = Paint();
 
   ///Randomizer for positions and walls distribution
-  final Random _randomizer = Random();
+  final Random _randomizer;
 
   ///Position of user from event
   late double _userX;
@@ -135,7 +136,9 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
     switch (direction) {
       case Direction.up:
         {
-          if (!_player.topWall) _player = _cells[_player.col][_player.row - 1];
+          if (!_player.topWall) {
+            _player = _cells[_player.col][_player.row - 1];
+          }
           break;
         }
       case Direction.down:
@@ -147,7 +150,9 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
         }
       case Direction.left:
         {
-          if (!_player.leftWall) _player = _cells[_player.col - 1][_player.row];
+          if (!_player.leftWall) {
+            _player = _cells[_player.col - 1][_player.row];
+          }
           break;
         }
       case Direction.right:
@@ -196,20 +201,28 @@ class MazePainter extends ChangeNotifier implements CustomPainter {
 
     if (absDx > _cellSize || absDy > _cellSize) {
       if (absDx > absDy) {
-        // X
-        if (dx > 0) {
-          movePlayer(Direction.right);
-        } else {
-          movePlayer(Direction.left);
-        }
+        _moveX(dx);
+        _moveY(dy);
       } else {
-        // Y
-        if (dy > 0) {
-          movePlayer(Direction.down);
-        } else {
-          movePlayer(Direction.up);
-        }
+        _moveY(dy);
+        _moveX(dx);
       }
+    }
+  }
+
+  void _moveX(double dx) {
+    if (dx > 0) {
+      movePlayer(Direction.right);
+    } else {
+      movePlayer(Direction.left);
+    }
+  }
+
+  void _moveY(double dy) {
+    if (dy > 0) {
+      movePlayer(Direction.down);
+    } else {
+      movePlayer(Direction.up);
     }
   }
 

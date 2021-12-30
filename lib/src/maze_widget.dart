@@ -29,6 +29,7 @@ class Maze extends StatefulWidget {
     this.wallColor = Colors.black,
     this.wallThickness = 3.0,
     this.width,
+    this.seed,
   });
 
   ///List of checkpoints
@@ -36,6 +37,9 @@ class Maze extends StatefulWidget {
 
   ///Columns of the maze
   final int columns;
+
+  /// The random seed.
+  final int? seed;
 
   ///The finish image
   final MazeItem? finish;
@@ -100,6 +104,7 @@ class _MazeState extends State<Maze> {
       rows: widget.rows,
       wallColor: widget.wallColor ?? Colors.black,
       wallThickness: widget.wallThickness ?? 4.0,
+      seed: widget.seed,
     );
     setState(() => _loaded = true);
   }
